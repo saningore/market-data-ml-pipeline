@@ -56,14 +56,14 @@ gitGraph
     commit id: "docs and MLOps prep"
 ```
 
-**Worked example: the schedule change.** The branch `chore/hourly-six-hour-schedule` changes one line in `prefect.yaml`, from `0 6,12 * * *` (06:00 and 12:00 daily) to `0 */6 * * 1-5` (every six hours, Monday to Friday). Opening a PR from it into `main` lets the class watch the full path. Review the diff, watch **checks** pass, merge, watch **deploy**, then confirm the new schedule in Prefect Cloud. Work that isn't ready for production, such as the MLOps preparation, stays on `dev`.
+**Worked example: the schedule change.** [PR #2](https://github.com/soloshun/market-data-ml-pipeline/pull/2) changed one line in `prefect.yaml`, from `0 6,12 * * *` (06:00 and 12:00 daily) to `0 */6 * * 1-5` (every six hours, Monday to Friday). The class watched the full path live: review the diff, watch **checks** pass, merge, watch **deploy**, then confirm the new schedule in Prefect Cloud. Open the PR to replay it. Its branch was deleted after the merge, as short-lived branches should be. Work that isn't ready for production, such as the MLOps preparation, stays on `dev`.
 
 **Terminal**
 
 ```sh
 git remote -v
 git branch -avv
-gh pr create --base main --head chore/hourly-six-hour-schedule --fill
+gh pr create --base main --head your-branch --fill
 ```
 
 **UI**: in GitHub, open **Pull requests → New pull request**. Set **base** to `main` and **compare** to your branch. Read the **Files changed** tab, then click **Create pull request**.
@@ -187,9 +187,11 @@ Expect 12 hourly Silver bars and 12 Gold preview rows in the logs. A **Quick run
 
 The hourly flow fetches one-hour bars for Yahoo's `GC=F` gold futures ticker. It writes validated bars to Silver (`market_data.hourly_prices`) and trailing features to Gold (`market_data.hourly_features`). Both tables use `(symbol, bar_start_utc)` as the key. If hourly Silver is empty, the first run backfills one year.
 
-- **Cadence:** `0 6,12 * * *` runs at **06:00 and 12:00 Africa/Accra**. After the [schedule PR](#1-how-a-change-reaches-production) merges, `0 */6 * * 1-5` runs at 00:00, 06:00, 12:00 and 18:00, Monday to Friday.
+- **Cadence:** `0 */6 * * 1-5` runs at **00:00, 06:00, 12:00 and 18:00 Africa/Accra, Monday to Friday**. Before the [schedule PR](#1-how-a-change-reaches-production), it ran at 06:00 and 12:00 daily.
 - **Cutoff:** a 12:00 run stores the bar that *started* at 11:00, because that hour has finished. It doesn't store the 12:00 bar, which is still open. Yahoo's own timestamps are kept, including sessions that start at half past the hour. Market closures or feed gaps can mean fewer than six new bars.
 - **Catch-up:** later runs read the newest stored bar, go back 24 hours to pick up revisions, and fetch up to the cutoff. Upserts make reruns safe. An older gap needs an explicit backfill, shown below.
+
+The weekday filter applies to run times, not to the market. CME gold futures reopen on Sunday evening in Chicago, so the first Monday run catches up on that session's bars. See the [CME gold futures fact card](https://www.cmegroup.com/market-regulation/files/gold-futures-and-options-fact-card.pdf) for trading hours.
 
 Gold holds the percent return from the previous bar, 5- and 20-bar moving averages, and sample volatility over the last five returns. Windows count *observed* bars, so one window can span a market closure. The flow rebuilds Gold from stored Silver, so a revised bar also updates the later features that depend on it. Silver and Gold commit in one transaction.
 

@@ -10,7 +10,7 @@ The local notebook teaches ingestion with a synthetic daily fixture. The MLOps l
 
 | Every weekday at (Africa/Accra = UTC) | Flow | Status |
 | --- | --- | --- |
-| 00:00, 06:00, 12:00, 18:00 | `hourly-ingestion` loads completed bars into Silver and Gold | Built. The [schedule PR](DEPLOYMENT.md#1-how-a-change-reaches-production) switches it from 06:00 and 12:00 daily to this cadence |
+| 00:00, 06:00, 12:00, 18:00 | `hourly-ingestion` loads completed bars into Silver and Gold | Live since [PR #2](https://github.com/soloshun/market-data-ml-pipeline/pull/2), which moved it from 06:00 and 12:00 daily to this cadence |
 | About 15 minutes later | A prediction flow loads the current champion model, reads the latest Gold row and forecasts the next six hours | MLOps sessions |
 | Six hours after each forecast | A scoring step stores the actual return next to the forecast | MLOps sessions |
 | Saturday 02:00 (`0 2 * * 6`), market closed | A training flow tunes XGBoost and LightGBM, keeps the better one, and sends it through the [production gate](#the-production-gate) | MLOps sessions |

@@ -236,7 +236,7 @@ Tests use the fixtures, SQLite and a temporary local Prefect server, so they nee
 
 Work happens on `dev`. `main` is production. GitHub runs the checks on every PR into `main`, and a passing merge registers that exact commit in Prefect Cloud as `hourly-ingestion/hourly-gold-bars`. The [deployment guide](docs/DEPLOYMENT.md) walks through the full release, with a terminal route and a UI route for each step.
 
-To rehearse the hourly flow locally, run `uv run market-data hourly`. It loads 12 synthetic hourly Silver bars and their Gold features into SQLite.
+To rehearse the hourly flow locally, run `uv run market-data hourly`. It loads 12 synthetic hourly Silver bars and their Gold features into SQLite. In production, the flow collects completed one-hour bars every six hours, Monday to Friday in Accra.
 
 ## Documentation
 

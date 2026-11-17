@@ -7,7 +7,6 @@
 - Keep credentials in ignored local files or the appropriate environment. Commit `uv.lock` and use `dev` for work before merging to `main`.
 - Use Conventional Commits with a scope, for example `feat(ingestion): add hourly gold bars`.
 - Keep the `pip_packages` pins in `prefect.yaml` equal to `uv.lock`. `tests/test_deployment.py` enforces this.
-- Leave `chore/hourly-six-hour-schedule` untouched. The instructor uses it as the live PR-to-`main` release demo.
 - Docs are student-facing. When behavior changes, update the matching guide in `docs/`, and `docs/CONCEPTS.md` if a new concept appears.
 - Track planned work in `docs/ROADMAP.md`. Tick an item in the same commit that delivers it.
 - Never add or extend a dependency-audit waiver in `security/audit-waivers.toml` without the instructor's explicit approval. Prefer upgrading the package.
