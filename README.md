@@ -26,7 +26,20 @@ Everything runs locally first, with no accounts and no network, using a small sy
 | 6 | Release to production with GitHub, Prefect Cloud and Supabase | [Deployment](docs/DEPLOYMENT.md) |
 | 7 | Hand the hourly data to the ML sessions | [MLOps kickoff](docs/MLOPS.md) |
 
-Along the way: [roadmap](docs/ROADMAP.md) · [practice exercises and the assignment](docs/STUDENT_ASSIGNMENT.md) · [concepts map and further reading](docs/CONCEPTS.md) · [troubleshooting](docs/TROUBLESHOOTING.md) · [instructor guide](docs/INSTRUCTOR_DEMO.md)
+Along the way: [roadmap](docs/ROADMAP.md) · [session recordings](#session-recordings) · [practice exercises and the assignment](docs/STUDENT_ASSIGNMENT.md) · [concepts map and further reading](docs/CONCEPTS.md) · [troubleshooting](docs/TROUBLESHOOTING.md) · [instructor guide](docs/INSTRUCTOR_DEMO.md)
+
+## Session recordings
+
+The live sessions were recorded. In them, the instructor explains the code and runs it step by step. Watch them with this repository open beside the video. The recordings are on Google Drive, and anyone with the link can view them.
+
+| Session | What it covers | Recording |
+| --- | --- | --- |
+| Theory → Working Pipeline | Data engineering foundations: pipeline anatomy, medallion layers, data quality, ETL vs ELT, and the dev-to-prod workflow. [Slides](https://gamma.app/docs/Theory-Working-Pipeline-s6v9hogx9py3t3s) | *Link coming soon* |
+| Code walkthrough, part 1 | The notebook, the CLI and the daily flow: Bronze, Silver, Gold and SQLite | *Link coming soon* |
+| Code walkthrough, part 2 | Prefect runs, catch-up and backfill, and the hourly flow | *Link coming soon* |
+| Release to production | Merging a PR into `main` live, the new Prefect schedule, and the security gate | *Link coming soon* |
+
+The code keeps improving after each recording. If something on screen looks different from the repository, check the [commit history](https://github.com/soloshun/market-data-ml-pipeline/commits/main) around the session date.
 
 ## Architecture at a glance
 
@@ -230,6 +243,7 @@ To rehearse the hourly flow locally, run `uv run market-data hourly`. It loads 1
 | Guide | For | What's inside |
 | --- | --- | --- |
 | [Theory slides](https://gamma.app/docs/Theory-Working-Pipeline-s6v9hogx9py3t3s) | Everyone | Data engineering foundations, before the code |
+| [Session recordings](#session-recordings) | Everyone | Videos of the live code walkthroughs, on Google Drive |
 | [Roadmap](docs/ROADMAP.md) | Everyone | What's done, and the plan for the ML lifecycle, MLflow and compute lectures |
 | [Architecture](docs/ARCHITECTURE.md) | Everyone | Layers, reading order, transactions, the hourly design |
 | [Schema drift](docs/SCHEMA_DRIFT.md) | Everyone | Kinds of drift; rescue, fail fast, quarantine, evolve |
