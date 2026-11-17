@@ -1,10 +1,28 @@
 # Instructor walkthrough · 60 minutes
 
-Start with the [historical ingestion notebook](../notebooks/01_historical_ingestion.ipynb) in one VS Code pane and the linked source files in the other. Keep one terminal for commands and one for Prefect. The fixture is the default for every core exercise.
+Start with the [local daily notebook](../notebooks/01_historical_ingestion.ipynb) in one VS Code pane and the linked source files in the other. Keep one terminal for commands and one for local Prefect. The fixture is the default for the 60-minute lesson. Use the Cloud follow-up after students have seen daily Silver and Gold in SQLite.
+
+## Where this lesson fits
+
+| Session | Focus | Guide | Students practice with |
+| --- | --- | --- | --- |
+| 0 | Theory: pipeline anatomy, medallion, quality, ETL vs ELT | [Theory → Working Pipeline slides](https://gamma.app/docs/Theory-Working-Pipeline-s6v9hogx9py3t3s) | — |
+| 1 · this walkthrough | Local pipeline: Bronze, Silver, Gold, idempotency, Prefect, recovery | This page and the notebook | Warm-ups 1–3 |
+| 2 | Schema drift and data quality | [SCHEMA_DRIFT.md](SCHEMA_DRIFT.md) | Warm-ups 4–5 and 7–8 |
+| 3 | Security in a pipeline | [SECURITY.md](SECURITY.md) | The scavenger hunt in §2 and its exercises |
+| 4 | Release to production: PR → `main` → Prefect Cloud | [DEPLOYMENT.md](DEPLOYMENT.md), [PR #2](https://github.com/soloshun/market-data-ml-pipeline/pull/2), the schedule change | Warm-ups 6, 9 and 10, then the assignment |
+| End-to-end ML lifecycle | Dataset, EDA, features, XGBoost and LightGBM, tuning | [ROADMAP.md](ROADMAP.md#sprint-2--end-to-end-ml-lifecycle), [MLOPS.md](MLOPS.md#features-to-try) | — |
+| Automations using MLflow | Tracking, registry, deployment strategies, scheduled prediction | [ROADMAP.md](ROADMAP.md#sprint-3--automations-using-mlflow), [MLOPS.md](MLOPS.md#deployment-strategies) | — |
+| Distributed vs single-thread compute | Spark, and pandas vs Polars | [ROADMAP.md](ROADMAP.md#sprint-4--distributed-vs-single-thread-compute), notebook Section 7 | — |
+| Optional: business dashboard | A Next.js dashboard built with AI coding agents | [ROADMAP.md](ROADMAP.md#sprint-5--business-dashboard-with-ai-coding-agents-optional) | — |
+
+The warm-ups are in [STUDENT_ASSIGNMENT.md](STUDENT_ASSIGNMENT.md#part-1--warm-up-exercises). Leave parts of the code unexplained on purpose, and let students find them through the exercises. [CONCEPTS.md](CONCEPTS.md) gives them a map for reading on their own.
+
+> **Private notes:** files named `docs/*.local.md` are git-ignored. Use them for answers, timings or cohort notes you don't want in the student repository.
 
 ## Before class
 
-1. Open the code editor with `cli.py`, `flows/historical_ingestion.py`, `ingest.py`, `validate.py`, `transform.py` and `storage.py`.
+1. Open `cli.py`, `flows/historical_ingestion.py`, and the source, validation, feature, and storage modules under `ingestion/`.
 2. Run `uv python install 3.12` and `uv sync --locked --group notebook` at the repository root. Open the notebook with the project's `.venv` kernel and run all cells. Copy `.env.example` to `.env` if needed. Run `uv run --locked pytest`.
 3. Run notebook Section 5 and open `data/market_data.sqlite3` in your SQLite viewer if you plan to show the tables outside the notebook.
 4. Start Prefect in its own terminal and open [the local dashboard](http://127.0.0.1:4200).
@@ -52,7 +70,9 @@ Identify `GC=F` as gold futures and the CSV as synthetic.
 
 Use notebook Sections 3 and 4 to show the duplicate-key check, inspect the features, and plot close, moving averages, and daily returns.
 
-In `validate.py`, trace a date, the OHLC bounds, volume, and the duplicate check. In `transform.py`, trace `shift(1)` and the windows over each symbol. Ask what a future observation could change about the displayed rows. Point out the first non-null five-observation mean and volatility. The 20-observation mean starts on observation 20.
+For a five-minute schema drift demo, run Section 3a. It shows four responses in order: Bronze metadata (*what arrived, and when?*), rescue (`VendorNote` is kept as JSON), fail fast (a missing `High` rejects the batch) and quarantine (one `"unknown"` row is set aside). Point out that the real flows rescue fields in hourly Silver and fail fast everywhere, while the quarantine is only a classroom example. Then ask: *which kind of drift raises no error at all?* The answer, a change in what `Close` means, is in [SCHEMA_DRIFT.md §1](SCHEMA_DRIFT.md#1-what-can-drift).
+
+In `validation.py`, trace a date, the OHLC bounds, volume, and the duplicate check. In `features.py`, trace `shift(1)` and the windows over each symbol. Ask what a future observation could change about the displayed rows. Point out the first non-null five-observation mean and volatility. The 20-observation mean starts on observation 20.
 
 ## 25–35 · Load and query SQLite (10 minutes)
 
@@ -103,8 +123,8 @@ Open each run in Prefect. The first fails on attempt one, retries, and completes
 
 ## Cloud follow-up: PR, schedule, and failure alert
 
-1. Before the first release, apply the updated [schema](../sql/schema.sql) in Supabase SQL Editor to add hourly Silver and Gold. In class, show the hourly schedule at **06:00 and 12:00 Accra**. Start the [hourly backfill](DEPLOYMENT.md#7-collect-hourly-gold-bars) if the tables are still empty. Trace the latest saved hour, the exclusive cutoff, and the Silver and Gold steps in [the hourly flow](../src/market_data/flows/hourly_ingestion.py). Compare the counts for both tables in Supabase.
-2. Open the schedule PR and show the cron change in `prefect.yaml`. Merge when ready. Watch **checks** then **deploy**, and compare the deployment version in Prefect Cloud with the commit on `main`. Open the schedule to confirm the new times.
+1. Before the first release, apply the updated [schema](../sql/schema.sql) in Supabase SQL Editor to add hourly Silver and Gold. In class, show the hourly schedule at **00:00, 06:00, 12:00 and 18:00 Accra, Monday to Friday**. Start the [hourly backfill](DEPLOYMENT.md#7-collect-hourly-gold-bars) if the tables are still empty. Trace the latest saved hour, the exclusive cutoff, and the Silver and Gold steps in [the hourly flow](../src/market_data/flows/hourly_ingestion.py). Compare the counts for both tables in Supabase.
+2. Make a small, safe change on a short-lived branch and open a PR into `main`, as [PR #2](https://github.com/soloshun/market-data-ml-pipeline/pull/2) did for the schedule. Merge when the checks pass. Watch **checks** then **deploy**, and compare the deployment version in Prefect Cloud with the commit on `main`. Delete the branch after the merge.
 3. Optional alert: In Prefect Cloud, open **Automations** and add a **Flow run state** trigger for **Failed**, with the single flow run tag `classroom-alert-demo`. Choose **Send an email notification**, if available in your workspace, and enter your own test inbox. Save and enable it. The tag keeps the classroom alert scoped to the test run.
 4. From the Cloud terminal, schedule the following one-off run a minute ahead. Show it enter **Scheduled**, then open the logs once it reaches **Failed**. The start and end match, so the hourly flow rejects the empty window before fetching or writing.
 
@@ -117,6 +137,8 @@ Open each run in Prefect. The first fails on attempt one, retries, and completes
 5. Check the automation activity and your inbox, then pause the demo automation. If email isn't available, use the run's Failed state and logs to teach how the trigger would work.
 
 For the later ML session, a 12:00 checkpoint can use features available by noon to predict the close of the bar ending at 18:00, or the return between the two closes. Use an exact six-hour target for each example and skip examples where the target bar is missing, including after market close on Friday. Target construction, the time-based split, and model training come later.
+
+For the next session, open the [MLOps handoff](MLOPS.md) to trace the target back to hourly Silver and Gold. Use the [GitHub security walkthrough](SECURITY.md) to show where dependency and secret alerts appear.
 
 [Prefect automation setup](https://www.prefect.io/docs/v3/how-to-guides/automations/creating-automations) · [Prefect email notifications](https://www.prefect.io/docs/v3/concepts/automations#sending-notifications-with-automations)
 

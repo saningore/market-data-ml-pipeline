@@ -6,13 +6,14 @@ import polars as pl
 from prefect import flow, get_run_logger, task
 from prefect.cache_policies import NO_CACHE
 
-from market_data import config, storage
+from market_data import config
 from market_data.config import Source
 from market_data.flows._shared import database_target, retry_transient
-from market_data.hourly import hourly_window, read_hourly_fixture
-from market_data.ingest import fetch_yahoo_hourly
-from market_data.transform import build_hourly_features
-from market_data.validate import validate_hourly_prices
+from market_data.ingestion import storage
+from market_data.ingestion.features import build_hourly_features
+from market_data.ingestion.hourly import hourly_window, read_hourly_fixture
+from market_data.ingestion.sources import fetch_yahoo_hourly
+from market_data.ingestion.validation import validate_hourly_prices
 
 
 @task(
@@ -35,9 +36,29 @@ def fetch_hourly(source: Source, symbol: str, start: datetime, end: datetime) ->
     return fetch_yahoo_hourly(symbol, start, end)
 
 
-validate_hourly_silver = task(
-    validate_hourly_prices, name="validate_hourly_silver", cache_policy=NO_CACHE
-)
+@task(cache_policy=NO_CACHE)
+def validate_hourly_silver(
+    raw: pl.DataFrame, symbol: str, start: datetime, end: datetime
+) -> pl.DataFrame:
+    """Validate the fetched window and count bars with rescued fields.
+
+    Args:
+        raw: Provider bars with the original column names.
+        symbol: Ticker attached to the Silver rows.
+        start: First included bar start.
+        end: First excluded bar start.
+
+    Returns:
+        Validated Silver bars with nullable rescued JSON.
+    """
+    prices = validate_hourly_prices(raw, symbol, start, end)
+    get_run_logger().info(
+        "Validated %d hourly Silver bars. %d contain rescued fields. Latest bar starts %s.",
+        prices.height,
+        prices.height - prices["_rescued_data"].null_count(),
+        prices["bar_start_utc"][-1],
+    )
+    return prices
 
 
 @task(cache_policy=NO_CACHE)
@@ -87,7 +108,8 @@ def ingest_hourly_gold(
         source: Fixture (synthetic gold) or Yahoo Finance (GC=F gold futures).
         start_at: First included UTC hour for a backfill, or None to catch up.
         end_at: First excluded UTC hour, or None for the latest safe cutoff.
-        skip_db: Preview the rows without reading or writing the database.
+        skip_db: Preview without database access. Set require_db=False and
+            database_secret_block=None for this mode.
         require_db: Require PostgreSQL when no Secret block is specified.
         database_secret_block: Name of the Prefect Secret with the PostgreSQL URI.
 
@@ -99,7 +121,11 @@ def ingest_hourly_gold(
     """
     now = datetime.now(UTC)
     if skip_db and (require_db or database_secret_block):
-        raise ValueError("An hourly preview cannot also request PostgreSQL.")
+        raise ValueError(
+            "skip_db=True previews the data without using a database. "
+            "For a preview, set require_db=False and database_secret_block=None. "
+            "To write to PostgreSQL, set skip_db=False."
+        )
     symbol = config.resolve_symbols(source, None)[0]
     latest = None
     if start_at is None and not skip_db:
@@ -115,10 +141,5 @@ def ingest_hourly_gold(
     )
     raw = fetch_hourly(source, symbol, start, end)
     prices = validate_hourly_silver(raw, symbol, start, end)
-    get_run_logger().info(
-        "Validated %d hourly Silver bars. Latest bar starts %s.",
-        prices.height,
-        prices["bar_start_utc"][-1],
-    )
     store_hourly_silver_and_gold(prices, source, skip_db, require_db, database_secret_block)
     return prices

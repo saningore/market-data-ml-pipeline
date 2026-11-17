@@ -17,6 +17,25 @@ SOURCE_COLUMNS = {
 }
 
 
+def rescue_extra_columns(raw: pl.DataFrame) -> pl.DataFrame:
+    """Collect unfamiliar source fields in one JSON string per row.
+
+    Args:
+        raw: Provider rows before attaching Bronze metadata.
+
+    Returns:
+        Recognized fields, including optional Adj Close, and a nullable JSON column.
+    """
+    recognized = SOURCE_COLUMNS.keys() | {"Adj Close"}
+    known = [name for name in raw.columns if name in recognized]
+    extra = [name for name in raw.columns if name not in recognized]
+    if extra:
+        rescued = pl.struct(extra).struct.json_encode()
+    else:
+        rescued = pl.repeat(None, pl.len(), dtype=pl.String)
+    return raw.select(*known, rescued.alias("_rescued_data"))
+
+
 def validate_prices(raw: pl.DataFrame, symbol: str, start: date, end: date) -> pl.DataFrame:
     """Validate one ticker's source rows and convert them to Silver prices.
 
@@ -67,7 +86,7 @@ def validate_prices(raw: pl.DataFrame, symbol: str, start: date, end: date) -> p
 def validate_hourly_prices(
     raw: pl.DataFrame, symbol: str, start: datetime, end: datetime
 ) -> pl.DataFrame:
-    """Convert source hours to UTC and validate the hourly bar key and OHLCV.
+    """Validate hourly bars and retain unfamiliar source fields as JSON.
 
     Args:
         raw: Source OHLCV rows with a timezone-aware Date column.
@@ -76,7 +95,7 @@ def validate_hourly_prices(
         end: First excluded bar start. The bar starting here is still open.
 
     Returns:
-        Typed hourly bars sorted by UTC start time.
+        Typed hourly bars sorted by UTC start time, with nullable rescued JSON.
 
     Raises:
         ValueError: The schema, timestamp, price, volume, or key is invalid.
@@ -86,7 +105,8 @@ def validate_hourly_prices(
     if not isinstance(timestamp, pl.Datetime) or timestamp.time_zone is None:
         raise ValueError(f"{symbol}: hourly bars require timezone-aware timestamps.")
     prices = (
-        raw.select(SOURCE_COLUMNS.keys())
+        rescue_extra_columns(raw)
+        .select(*SOURCE_COLUMNS, "_rescued_data")
         .rename(SOURCE_COLUMNS)
         .rename({"trade_date": "bar_start_utc"})
         .with_columns(
@@ -104,9 +124,9 @@ def validate_hourly_prices(
         "duplicate symbol and hour": pl.struct(HOURLY_KEY).is_duplicated(),
     }
     _check_rows(prices, symbol, "bar_start_utc", checks)
-    return prices.select(*HOURLY_KEY, *PRICE_COLUMNS, pl.col("volume").cast(pl.Int64)).sort(
-        HOURLY_KEY
-    )
+    return prices.select(
+        *HOURLY_KEY, *PRICE_COLUMNS, pl.col("volume").cast(pl.Int64), "_rescued_data"
+    ).sort(HOURLY_KEY)
 
 
 def _check_source(

@@ -2,9 +2,9 @@ name: Verify and deploy
 
 on:
   push:
-    branches: [dev, main]
+    branches: [main]
   pull_request:
-    branches: [dev, main]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -45,6 +45,13 @@ jobs:
       - run: uv run --locked ruff check .
       - run: uv run --locked ruff format --check .
       - run: uv run --locked pytest
+      # Security gate: a known vulnerability fails the checks job, which blocks the merge
+      # because the protect-main ruleset requires "checks". Reviewed, expiring exceptions
+      # live in security/audit-waivers.toml (see docs/SECURITY.md).
+      - name: Audit locked dependencies
+        env:
+          RUST_LOG: error
+        run: uv run --locked python security/audit.py
 
   deploy:
     needs: checks
