@@ -65,6 +65,8 @@ flowchart LR
 - [ ] **Finish the code walkthrough.** Cover the remaining modules with the [reading order](ARCHITECTURE.md#read-the-code-in-this-order). Leave some parts for students to discover through the [warm-up exercises](STUDENT_ASSIGNMENT.md#part-1--warm-up-exercises).
 - [x] **Class wrap-up: push to production.** Used the [schedule PR](https://github.com/soloshun/market-data-ml-pipeline/pull/2) to move from 06:00 and 12:00 daily to 00:00, 06:00, 12:00 and 18:00 on weekdays in Accra. Review the diff, watch **checks**, merge, watch **deploy**, then compare the deployed commit and schedule in Prefect. Show how to pause or resume and inspect a catch-up run. If time allows, demonstrate a scoped failure alert. Leave time for questions and [student projects](STUDENT_ASSIGNMENT.md).
 
+- [x] **Lab sessions.** Students asked for a guided path to build their *own* pipeline. The [labs](labs/README.md) go from machine setup through a Prefect hello world, Bronze, Silver, Gold, orchestration, production on Supabase with CI/CD, and hardening. A tested weather example runs alongside, and each lab has a "Your turn" step and troubleshooting. MLOps labs 11–15 follow the next sprints.
+
 **Show at the end:** Re-run an ingestion window, explain why the same keys remain unique, and trace one record from its source through Silver and Gold.
 
 ## Sprint 2 · End-to-end ML lifecycle
