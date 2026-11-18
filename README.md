@@ -25,8 +25,9 @@ Everything runs locally first, with no accounts and no network, using a small sy
 | 5 | Keep credentials and dependencies safe | [Security](docs/SECURITY.md) |
 | 6 | Release to production with GitHub, Prefect Cloud and Supabase | [Deployment](docs/DEPLOYMENT.md) |
 | 7 | Hand the hourly data to the ML sessions | [MLOps kickoff](docs/MLOPS.md) |
+| 8 | **Build your own pipeline**, step by step, from an empty folder to production | [Lab sessions](docs/labs/README.md) |
 
-Along the way: [roadmap](docs/ROADMAP.md) · [session recordings](#session-recordings) · [practice exercises and the assignment](docs/STUDENT_ASSIGNMENT.md) · [concepts map and further reading](docs/CONCEPTS.md) · [troubleshooting](docs/TROUBLESHOOTING.md) · [instructor guide](docs/INSTRUCTOR_DEMO.md)
+Along the way: [lab sessions](docs/labs/README.md) · [roadmap](docs/ROADMAP.md) · [session recordings](#session-recordings) · [practice exercises and the assignment](docs/STUDENT_ASSIGNMENT.md) · [concepts map and further reading](docs/CONCEPTS.md) · [troubleshooting](docs/TROUBLESHOOTING.md) · [instructor guide](docs/INSTRUCTOR_DEMO.md)
 
 ## Session recordings
 
@@ -250,6 +251,7 @@ To rehearse the hourly flow locally, run `uv run market-data hourly`. It loads 1
 | [Security](docs/SECURITY.md) | Everyone | What we protect, controls in this repo, leaked-secret response |
 | [Deployment](docs/DEPLOYMENT.md) | Everyone | GitHub → Prefect Cloud → Supabase, terminal and UI routes |
 | [MLOps kickoff](docs/MLOPS.md) | Next sessions | Forecast checkpoint, target, time split, production rhythm |
+| [Lab sessions](docs/labs/README.md) | Students | Step-by-step labs to build your own pipeline, from setup to production |
 | [Practice and assignment](docs/STUDENT_ASSIGNMENT.md) | Students | Warm-up exercises and the build-your-own-pipeline rubric |
 | [Concepts map](docs/CONCEPTS.md) | Students | Every concept used here, plus what to learn next |
 | [Troubleshooting](docs/TROUBLESHOOTING.md) | Everyone | Symptoms and fixes |

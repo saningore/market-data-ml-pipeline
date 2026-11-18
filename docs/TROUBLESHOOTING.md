@@ -1,5 +1,7 @@
 # Troubleshooting
 
+This page covers the workshop repository. For problems in your own pipeline while following the labs, see [lab troubleshooting](labs/troubleshooting.md).
+
 | Symptom | What to check |
 | --- | --- |
 | `uv` or Python unavailable | Install uv, restart the terminal, and run `uv python install 3.12` then `uv sync --locked`. The project pins the Python minor version in `.python-version`. Run from the repository root. PowerShell uses `Copy-Item` and `$env:NAME = 'value'`. |

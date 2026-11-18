@@ -41,7 +41,7 @@ Open a pull request into **your own** `dev` branch for review. Don't merge into 
 
 ## Part 2 · Build your own pipeline
 
-Adapt this repository to a source you can explain, such as weather observations, sports results, public transport, air quality or retail transactions. Submit a repository and a five-minute walkthrough video or live demo. Include a small offline fixture and instructions a classmate can follow from a clean checkout.
+Build a pipeline for a source you can explain, such as weather observations, sports results, public transport, air quality or retail transactions. The [lab sessions](labs/README.md) take you there step by step, from an empty folder to a scheduled production deployment, and [Lab 10](labs/lab-10-harden.md#final-checklist) maps each rubric line below to the lab that covers it. Submit a repository and a five-minute walkthrough video or live demo. Include a small offline fixture and instructions a classmate can follow from a clean checkout.
 
 **Pick a source that has:** a clear record key (for example `station_id` + `observed_at`), at least one numeric field you can validate, and a free API or downloadable file. Avoid sources that need paid keys or contain personal data.
 

@@ -8,5 +8,6 @@
 - Use Conventional Commits with a scope, for example `feat(ingestion): add hourly gold bars`.
 - Keep the `pip_packages` pins in `prefect.yaml` equal to `uv.lock`. `tests/test_deployment.py` enforces this.
 - Docs are student-facing. When behavior changes, update the matching guide in `docs/`, and `docs/CONCEPTS.md` if a new concept appears.
+- `docs/labs/` guides students to build their *own* pipeline. Its weather worked example is tested code: when you change it, rebuild it in a scratch project with `uv init --package` and run every lab command and test before committing.
 - Track planned work in `docs/ROADMAP.md`. Tick an item in the same commit that delivers it.
 - Never add or extend a dependency-audit waiver in `security/audit-waivers.toml` without the instructor's explicit approval. Prefer upgrading the package.
