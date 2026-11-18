@@ -252,6 +252,7 @@ To rehearse the hourly flow locally, run `uv run market-data hourly`. It loads 1
 | [Deployment](docs/DEPLOYMENT.md) | Everyone | GitHub → Prefect Cloud → Supabase, terminal and UI routes |
 | [MLOps kickoff](docs/MLOPS.md) | Next sessions | Forecast checkpoint, target, time split, production rhythm |
 | [Lab sessions](docs/labs/README.md) | Students | Step-by-step labs to build your own pipeline, from setup to production |
+| [AI prompts for the labs](docs/labs/ai-prompts.md) | Students | Copy-and-fill prompts for using an AI assistant in each lab, from planning to Supabase SQL |
 | [Practice and assignment](docs/STUDENT_ASSIGNMENT.md) | Students | Warm-up exercises and the build-your-own-pipeline rubric |
 | [Concepts map](docs/CONCEPTS.md) | Students | Every concept used here, plus what to learn next |
 | [Troubleshooting](docs/TROUBLESHOOTING.md) | Everyone | Symptoms and fixes |

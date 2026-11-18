@@ -178,6 +178,9 @@ Press `Cmd + Shift + P` (Windows: `Ctrl + Shift + P`), run **Python: Select Inte
 
 ### Your turn
 
+> [!TIP]
+> **Using AI?** Copy-and-fill prompts for this lab are in [AI prompts](ai-prompts.md#lab-2--create-the-project). You still need to be able to explain every line you commit.
+
 Write two sentences at the top of `README.md`: what data your pipeline collects, and from where. Commit and push:
 
 ```sh

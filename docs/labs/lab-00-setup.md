@@ -108,6 +108,9 @@ code --version
 
 If `code` isn't found on macOS, open VS Code, press `Cmd + Shift + P`, and run **Shell Command: Install 'code' command in PATH**.
 
+> [!TIP]
+> **Using AI?** Copy-and-fill prompts for this lab are in [AI prompts](ai-prompts.md#lab-0--setup). You still need to be able to explain every line you commit.
+
 ## Stuck?
 
 | Symptom | Fix |

@@ -99,6 +99,9 @@ Create a text file somewhere handy (you'll move it into your project in Lab 2) a
 
 ### Your turn
 
+> [!TIP]
+> **Using AI?** Copy-and-fill prompts for this lab are in [AI prompts](ai-prompts.md#lab-1--choose-your-data-and-plan). You still need to be able to explain every line you commit.
+
 Fill in the template for **your** source. Be specific about the record key and the rules. If you can't name a record key, pick a different source, because Lab 7 depends on it.
 
 ## Checkpoint

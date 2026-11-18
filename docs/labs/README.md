@@ -12,6 +12,9 @@ Each lab works the same way:
 6. **Stuck?** The most common problems for that lab. The [lab troubleshooting page](troubleshooting.md) has more.
 
 > [!TIP]
+> **Using an AI assistant?** [AI prompts](ai-prompts.md) has copy-and-fill prompts for every lab: finding a source, drafting your validation rules and tests, writing your Supabase SQL, debugging an error, and practising how to explain your pipeline. Use them to go faster on the mechanical parts, not to skip the thinking.
+
+> [!TIP]
 > No source in mind yet? Follow the weather example as your own pipeline. You can switch to another source later, and the steps stay the same.
 
 ## The labs
@@ -67,4 +70,5 @@ Until then, the [MLOps kickoff](../MLOPS.md) and the [roadmap](../ROADMAP.md) sh
 
 1. Read the **Stuck?** table at the end of the lab, then the [lab troubleshooting page](troubleshooting.md).
 2. Read the error from the bottom up. The last lines usually name the problem.
-3. Ask in the class channel. Paste the command you ran, the last 20 lines of output, and what you expected. **Never paste passwords, API keys or database URLs.**
+3. Ask an AI assistant with the [Debug an error](ai-prompts.md#debug-an-error) prompt. Remove secrets first.
+4. Ask in the class channel. Paste the command you ran, the last 20 lines of output, and what you expected. **Never paste passwords, API keys or database URLs.**

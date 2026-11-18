@@ -266,6 +266,9 @@ uv run pytest
 
 ## Your turn
 
+> [!TIP]
+> **Using AI?** Copy-and-fill prompts for this lab are in [AI prompts](ai-prompts.md#lab-7--gold-and-an-idempotent-load). You still need to be able to explain every line you commit.
+
 For **your** source:
 
 1. **Design Gold.** Pick two or three values someone would actually use, such as a change from the previous record, a rolling average, a flag or a category. Write each one in `transform.py`, and test at least one by hand-computing the expected answer.

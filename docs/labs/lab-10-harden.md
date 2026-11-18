@@ -165,6 +165,9 @@ The best test of a runbook: give it to a classmate, and ask them to backfill one
 
 ## Your turn
 
+> [!TIP]
+> **Using AI?** Copy-and-fill prompts for this lab are in [AI prompts](ai-prompts.md#lab-10--harden-and-hand-over). You still need to be able to explain every line you commit.
+
 1. Add drift detection to **your** pipeline, and simulate an added and a renamed field.
 2. Run `uv audit` locally, and turn on Dependabot alerts and push protection.
 3. Create the failure automation and trigger it once.

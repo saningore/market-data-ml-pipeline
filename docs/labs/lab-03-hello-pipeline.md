@@ -169,6 +169,9 @@ uv run pytest
 
 ### Your turn
 
+> [!TIP]
+> **Using AI?** Copy-and-fill prompts for this lab are in [AI prompts](ai-prompts.md#lab-3--hello-world-pipeline). You still need to be able to explain every line you commit.
+
 Copy `hello.py` to `src/my_pipeline/plan_sketch.py`, then rename the tasks and messages to match **your** plan from Lab 1. For example, a currency pipeline might have `fetch_rates`, `check_rates` and `save_rates`, each printing what it *will* do. Run it and look at the graph in the UI. You've just drawn your real pipeline before writing it.
 
 Commit:

@@ -207,6 +207,9 @@ uv run pytest
 
 ## Your turn
 
+> [!TIP]
+> **Using AI?** Copy-and-fill prompts for this lab are in [AI prompts](ai-prompts.md#lab-5--extract-into-bronze). You still need to be able to explain every line you commit.
+
 Write the extract step for **your** source, in your own `extract.py` (and your own `config.py`).
 
 1. **A fetch function** that takes the parameters your plan needs (dates, a city, a currency…) and returns what the source sent. Don't clean anything yet.
