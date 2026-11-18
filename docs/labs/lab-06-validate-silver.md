@@ -188,6 +188,9 @@ uv run pytest
 
 ## Your turn
 
+> [!TIP]
+> **Using AI?** Copy-and-fill prompts for this lab are in [AI prompts](ai-prompts.md#lab-6--validate-into-silver). You still need to be able to explain every line you commit.
+
 Write `validate.py` for **your** source, using the contract from your Lab 1 plan.
 
 1. **Name the fields** your Silver table promises, and map the source's names to yours.

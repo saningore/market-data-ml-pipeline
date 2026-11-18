@@ -244,6 +244,9 @@ uv run pytest
 
 ## Your turn
 
+> [!TIP]
+> **Using AI?** Copy-and-fill prompts for this lab are in [AI prompts](ai-prompts.md#lab-8--orchestrate-it). You still need to be able to explain every line you commit.
+
 Build the flow for **your** pipeline:
 
 1. **Tasks** that call your extract, Bronze, validate and load functions.

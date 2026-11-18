@@ -388,6 +388,9 @@ git push
 
 ### Your turn
 
+> [!TIP]
+> **Using AI?** Copy-and-fill prompts for this lab are in [AI prompts](ai-prompts.md#lab-9--go-to-production). You still need to be able to explain every line you commit.
+
 Do all of the above for **your** pipeline: your tables in Supabase, your Secret block, your deployment with your schedule and pinned versions, your workflow, your ruleset. Then make one small, real change (a new location, a new Gold feature, a better log message) and release it the proper way: branch, pull request, green checks, merge, deploy.
 
 ## Checkpoint

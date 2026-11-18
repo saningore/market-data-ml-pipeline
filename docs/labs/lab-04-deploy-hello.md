@@ -150,6 +150,9 @@ Do this whenever you go back to local work, or your local runs will land in Pref
 
 ### Your turn
 
+> [!TIP]
+> **Using AI?** Copy-and-fill prompts for this lab are in [AI prompts](ai-prompts.md#lab-4--deploy-hello-world). You still need to be able to explain every line you commit.
+
 Deploy your `plan_sketch.py` flow from Lab 3 as a second deployment in the same `prefect.yaml`. Add another item under `deployments:` with its own `name` and `entrypoint`. Deploy with `--name` set to the new name, run it in the cloud, and find its graph in the UI.
 
 ## Checkpoint
